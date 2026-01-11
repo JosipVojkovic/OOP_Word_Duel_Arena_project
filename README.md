@@ -27,44 +27,7 @@ Word Duel Arena je interaktivna konzolna igra u kojoj tri igrača natječu se kr
 
 ### Preduvjeti
 
-- **C++17 kompajler** (g++ 7.0+ ili Visual Studio 2017+)
-- **Make** (opcionalno, za jednostavno buildanje)
-
-### Linux / macOS
-
-```bash
-# Kloniraj repozitorij
-git clone <URL_REPOZITORIJA>
-cd word-duel-arena
-
-# Kompajliranje s Makefile
-make
-
-# Pokretanje
-./word_duel_arena
-
-# Ili ručno kompajliranje
-g++ -std=c++17 -Wall -O2 -o word_duel_arena main.cpp Player.cpp Word.cpp PowerUp.cpp Game.cpp
-./word_duel_arena
-```
-
-### Windows
-
-```cmd
-# Kloniraj repozitorij
-git clone <URL_REPOZITORIJA>
-cd word-duel-arena
-
-# Kompajliranje s Makefile (ako imaš MinGW)
-mingw32-make
-
-# Pokretanje
-word_duel_arena.exe
-
-# Ili ručno kompajliranje
-g++ -std=c++17 -Wall -O2 -o word_duel_arena.exe main.cpp Player.cpp Word.cpp PowerUp.cpp Game.cpp
-word_duel_arena.exe
-```
+- **C++17 kompajler** (Visual Studio 2017+)
 
 ### Visual Studio (Windows)
 
