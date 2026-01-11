@@ -108,7 +108,6 @@ word-duel-arena/
 ├── Player.h/.cpp     # Hijerarhija igrača (Aggressive/Defensive/Balanced)
 ├── Word.h/.cpp       # Hijerarhija riječi (Normal/Encrypted/Bonus)
 ├── PowerUp.h/.cpp    # Hijerarhija power-upova
-├── Makefile          # Build skripta
 └── README.md         # Dokumentacija
 ```
 
@@ -131,17 +130,6 @@ Koristi samo standardnu C++ biblioteku:
 ---
 
 ## 🐛 Rješavanje problema
-
-### Problem: "g++ nije prepoznat kao naredba"
-**Rješenje**: Instaliraj GCC kompajler
-- **Linux**: `sudo apt install g++`
-- **macOS**: `xcode-select --install`
-- **Windows**: Instaliraj MinGW ili Visual Studio
-
-### Problem: "make nije prepoznat kao naredba"
-**Rješenje**: Koristi ručno kompajliranje ili instaliraj Make
-- **Windows**: Instaliraj MinGW s make alatom
-- **Alternative**: Koristi CMD naredbu iznad
 
 ### Problem: Program ne kompajlira zbog C++17
 **Rješenje**: Provjeri da koristiš `-std=c++17` flag i dovoljno noviju verziju kompaijlera
