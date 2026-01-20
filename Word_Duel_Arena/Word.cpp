@@ -4,9 +4,7 @@
 #include <cctype>
 #include <random>
 
-// Word bazna klasa
 Word::Word(const std::string& word) : secretWord(word) {
-    // Pretvori rijec u velika slova
     std::transform(secretWord.begin(), secretWord.end(), secretWord.begin(), ::toupper);
     initializeDisplayWord();
 }
@@ -18,7 +16,7 @@ void Word::initializeDisplayWord() {
             displayWord += '_';
         }
         else {
-            displayWord += c; // Razmaci i interpunkcija ostaju vidljivi
+            displayWord += c;
         }
     }
 }
@@ -26,14 +24,12 @@ void Word::initializeDisplayWord() {
 bool Word::guessLetter(char letter) {
     letter = std::toupper(letter);
 
-    // Provjeri je li slovo vec pogodeno
     if (guessedLetters.find(letter) != guessedLetters.end()) {
         return false;
     }
 
     guessedLetters.insert(letter);
 
-    // Provjeri postoji li slovo u rijeci
     bool found = false;
     for (size_t i = 0; i < secretWord.length(); ++i) {
         if (secretWord[i] == letter) {
@@ -57,7 +53,6 @@ bool Word::guessWord(const std::string& guess) {
 }
 
 void Word::revealLetter() {
-    // Pronadi nasumicno nepokazano slovo i otkrij ga
     std::vector<size_t> hiddenIndices;
     for (size_t i = 0; i < displayWord.length(); ++i) {
         if (displayWord[i] == '_') {
@@ -74,7 +69,6 @@ void Word::revealLetter() {
         char letter = secretWord[index];
         guessedLetters.insert(letter);
 
-        // Otkrij sva pojavljivanja tog slova
         for (size_t i = 0; i < secretWord.length(); ++i) {
             if (secretWord[i] == letter) {
                 displayWord[i] = letter;
@@ -99,36 +93,8 @@ void Word::display() const {
     std::cout << "\n";
 }
 
-// NormalWord
 NormalWord::NormalWord(const std::string& word) : Word(word) {}
 
-// EncryptedWord - ROT13 sifriranje za prikaz
-EncryptedWord::EncryptedWord(const std::string& word) : Word(word) {}
-
-char EncryptedWord::encryptChar(char c) const {
-    if (c >= 'A' && c <= 'Z') {
-        return ((c - 'A' + 13) % 26) + 'A';
-    }
-    return c;
-}
-
-void EncryptedWord::display() const {
-    std::cout << "  [ENCRYPTED] ";
-    for (char c : displayWord) {
-        if (c == '_') {
-            std::cout << "? ";
-        }
-        else if (std::isalpha(c)) {
-            std::cout << encryptChar(c) << " ";
-        }
-        else {
-            std::cout << c << " ";
-        }
-    }
-    std::cout << "\n";
-}
-
-// BonusWord
 BonusWord::BonusWord(const std::string& word, int multiplier)
     : Word(word), bonusMultiplier(multiplier) {
 }

@@ -14,7 +14,6 @@ Game::Game(int rounds)
 }
 
 void Game::initializeWordList() {
-    // Lista rijeci razlicitih tipova
     wordList = {
         "PROGRAMIRANJE", "ALGORITAM", "STRUKTURA", "NASLJEDIVANJE",
         "POLIMORFIZAM", "ENKAPSULACIJA", "APSTRAKCIJA", "KONSTRUKTOR",
@@ -27,19 +26,16 @@ void Game::initializeWordList() {
 std::shared_ptr<Word> Game::selectRandomWord() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> wordDis(0, wordList.size() - 1);
-    std::uniform_int_distribution<> typeDis(0, 2);
+    std::uniform_int_distribution<> wordDis(0, static_cast<int>(wordList.size()) - 1);
+    std::uniform_int_distribution<> typeDis(0, 1);
 
     std::string selectedWord = wordList[wordDis(gen)];
     int wordType = typeDis(gen);
 
-    // Kreiraj razlicit tip rijeci
     switch (wordType) {
     case 0:
         return std::make_shared<NormalWord>(selectedWord);
     case 1:
-        return std::make_shared<EncryptedWord>(selectedWord);
-    case 2:
         return std::make_shared<BonusWord>(selectedWord, 2);
     default:
         return std::make_shared<NormalWord>(selectedWord);
@@ -47,7 +43,6 @@ std::shared_ptr<Word> Game::selectRandomWord() {
 }
 
 void Game::distributePowerUps() {
-    // Svaki igrac dobije 1-2 power-upa na pocetku igre
     std::vector<std::shared_ptr<PowerUp>> availablePowerUps = {
         std::make_shared<RevealLetterPowerUp>(),
         std::make_shared<DoubleScorePowerUp>(),
@@ -60,10 +55,9 @@ void Game::distributePowerUps() {
 
     for (auto& player : players) {
         std::shuffle(availablePowerUps.begin(), availablePowerUps.end(), gen);
-        int numPowerUps = 1 + (gen() % 2); // 1 ili 2 power-upa
+        int numPowerUps = 1 + (gen() % 2);
 
         for (int i = 0; i < numPowerUps && i < static_cast<int>(availablePowerUps.size()); ++i) {
-            // Kloniraj power-up za svakog igraca
             std::shared_ptr<PowerUp> powerUp;
             if (availablePowerUps[i]->getName() == "Reveal Letter") {
                 powerUp = std::make_shared<RevealLetterPowerUp>();
@@ -144,7 +138,9 @@ void Game::displayRoundEnd() const {
     std::cout << "KRAJ RUNDE " << currentRound << "\n";
     std::cout << "Bodovi:\n";
     for (const auto& player : players) {
-        std::cout << "  " << player->getName() << ": " << player->getScore() << " bodova\n";
+        std::cout << "  " << player->getName() << ": ";
+        std::cout << std::fixed << std::setprecision(1) << static_cast<double>(player->getScore());
+        std::cout << std::defaultfloat << " bodova\n";
     }
     std::cout << std::string(60, '-') << "\n";
 }
@@ -154,7 +150,6 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
 
     std::cout << "\n>>> " << player->getName() << " je na potezu! <<<\n\n";
 
-    // Prikazi opcije
     std::cout << "sto zelis uciniti?\n";
     std::cout << "  1. Pogodi slovo\n";
     std::cout << "  2. Pogodi cijelu rijec\n";
@@ -174,7 +169,6 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
     }
 
     if (choice == 1) {
-        // Pogadanje slova
         std::cout << "Unesi slovo: ";
         char letter;
         std::cin >> letter;
@@ -189,9 +183,9 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
 
             if (currentWord->isComplete()) {
                 std::cout << "\n*** RIJEC JE POGODENA! ***\n";
-                return true; // Rijec zavrsena
+                return true;
             }
-            return false; // Tocno slovo - ostaje na potezu
+            return false;
         }
         else {
             if (!shieldActive) {
@@ -202,12 +196,11 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
                 std::cout << "\nNetocno! (Ali stit te zastitio)\n";
             }
             resetPowerUpEffects();
-            return false; // Netocno - prelazi na sljedeceg
+            return false;
         }
 
     }
     else if (choice == 2) {
-        // Pogadanje cijele rijeci
         std::cout << "Unesi rijec: ";
         std::string guess;
         std::cin >> guess;
@@ -217,7 +210,6 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
         if (correct) {
             int points = 5 * scoreMultiplier;
 
-            // Bonus za BonusWord
             auto bonusWord = std::dynamic_pointer_cast<BonusWord>(currentWord);
             if (bonusWord) {
                 points *= bonusWord->getBonusMultiplier();
@@ -226,7 +218,7 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
             player->addPoints(points);
             std::cout << "\n*** BRAVO! Pogodio si cijelu rijec! +" << points << " bodova ***\n";
             resetPowerUpEffects();
-            return true; // Rijec zavrsena
+            return true;
         }
         else {
             if (!shieldActive) {
@@ -237,12 +229,11 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
                 std::cout << "\nNetocno! (Ali stit te zastitio)\n";
             }
             resetPowerUpEffects();
-            return false; // Netocno - prelazi na sljedeceg
+            return false;
         }
 
     }
     else if (choice == 3 && player->hasPowerUps() && !player->hasPowerUpUsed()) {
-        // Koristenje power-upa
         std::cout << "\nDostupni power-upovi:\n";
         player->displayPowerUps();
 
@@ -255,29 +246,25 @@ bool Game::handlePlayerTurn(std::shared_ptr<Player> player) {
             if (powerUp) {
                 powerUp->apply(this, player.get(), currentWord.get());
 
-                // Provjeri je li rijec zavrsena (RevealLetter moze otkriti posljednje slovo)
                 if (currentWord->isComplete()) {
                     std::cout << "\n*** RIJEC JE POGODENA! ***\n";
                     return true;
                 }
 
-                // Nakon power-upa, igrac OSTAJE na potezu - rekurzivno pozovi opet
                 std::cout << "\nNakon power-upa napravi svoj potez!\n";
                 std::cout << "Pritisni Enter...";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cin.get();
 
-                // Rekurzivno pozovi ponovo za istog igraca
                 return handlePlayerTurn(player);
             }
         }
-        // Ako nije odabrao power-up, daj mu ponovo izbor
         return handlePlayerTurn(player);
 
     }
     else {
         std::cout << "Neispravan odabir!\n";
-        return handlePlayerTurn(player); // Ponovi izbor
+        return handlePlayerTurn(player);
     }
 }
 
@@ -286,7 +273,6 @@ void Game::playRound() {
     currentWord = selectRandomWord();
     currentPlayerIndex = 0;
 
-    // Reset power-up flagova za novu rundu
     for (auto& player : players) {
         player->resetPowerUpFlag();
     }
@@ -302,7 +288,6 @@ void Game::playRound() {
             roundComplete = true;
         }
         else {
-            // Prelazi na sljedeceg igraca
             nextPlayer();
         }
 
@@ -334,7 +319,6 @@ void Game::displayFinalResults() const {
     std::cout << std::string(20, ' ') << "KRAJ IGRE\n";
     std::cout << std::string(60, '=') << "\n\n";
 
-    // Sortiraj igrace po bodovima
     std::vector<std::shared_ptr<Player>> sortedPlayers = players;
     std::sort(sortedPlayers.begin(), sortedPlayers.end(),
         [](const auto& a, const auto& b) { return a->getScore() > b->getScore(); });
@@ -348,7 +332,9 @@ void Game::displayFinalResults() const {
     std::cout << "\n";
     if (sortedPlayers[0]->getScore() > sortedPlayers[1]->getScore()) {
         std::cout << "POBJEDNIK: " << sortedPlayers[0]->getName()
-            << " s " << sortedPlayers[0]->getScore() << " bodova!\n";
+            << " s ";
+        std::cout << std::fixed << std::setprecision(1) << static_cast<double>(sortedPlayers[0]->getScore());
+        std::cout << std::defaultfloat << " bodova!\n";
     }
     else {
         std::cout << "NERIJESENO izmedu:\n";
@@ -378,8 +364,9 @@ void Game::saveResults(const std::string& filename) const {
 
     for (size_t i = 0; i < sortedPlayers.size(); ++i) {
         file << (i + 1) << ". " << sortedPlayers[i]->getName()
-            << " [" << sortedPlayers[i]->getType() << "] - "
-            << sortedPlayers[i]->getScore() << " bodova\n";
+            << " [" << sortedPlayers[i]->getType() << "] - ";
+        file << std::fixed << std::setprecision(1) << static_cast<double>(sortedPlayers[i]->getScore());
+        file << std::defaultfloat << " bodova\n";
     }
 
     file.close();

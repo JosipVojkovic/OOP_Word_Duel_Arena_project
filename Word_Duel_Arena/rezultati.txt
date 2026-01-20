@@ -1,6 +1,6 @@
 WORD DUEL ARENA - REZULTATI IGRE
 ================================
 
-1. Josip [Defensive] - 10 bodova
-2. Jozo [Aggressive] - 2 bodova
-3. Vojka [Balanced] - 2 bodova
+1. Vojka [Balanced] - 2 bodova
+2. Josip [Aggressive] - 1 bodova
+3. Jozo [Defensive] - 1 bodova

@@ -3,9 +3,8 @@
 #include <iostream>
 #include <iomanip>
 
-// Player bazna klasa
 Player::Player(const std::string& playerName)
-    : name(playerName), score(0), powerUpUsedThisRound(false) {
+    : name(playerName), score(0.0), powerUpUsedThisRound(false) {
 }
 
 void Player::addPowerUp(std::shared_ptr<PowerUp> powerUp) {
@@ -36,24 +35,23 @@ void Player::displayPowerUps() const {
 }
 
 void Player::displayInfo() const {
-    std::cout << name << " [" << getType() << "] - Bodovi: " << score << "\n";
+    std::cout << name << " [" << getType() << "] - Bodovi: ";
+    std::cout << std::fixed << std::setprecision(1) << score << std::defaultfloat << "\n";
 }
 
-// AggressivePlayer - +50% bodova, -50% vise gubitka
 AggressivePlayer::AggressivePlayer(const std::string& playerName)
     : Player(playerName) {
 }
 
 void AggressivePlayer::addPoints(int points) {
-    score += static_cast<int>(points * 1.5);
+    score += points * 1.5;
 }
 
 void AggressivePlayer::subtractPoints(int points) {
-    score -= static_cast<int>(points * 1.5);
-    if (score < 0) score = 0;
+    score -= points * 1.5;
+    if (score < 0.0) score = 0.0;
 }
 
-// DefensivePlayer - normalan dobitak, -50% gubitka
 DefensivePlayer::DefensivePlayer(const std::string& playerName)
     : Player(playerName) {
 }
@@ -63,11 +61,10 @@ void DefensivePlayer::addPoints(int points) {
 }
 
 void DefensivePlayer::subtractPoints(int points) {
-    score -= static_cast<int>(points * 0.5);
-    if (score < 0) score = 0;
+    score -= points * 0.5;
+    if (score < 0.0) score = 0.0;
 }
 
-// BalancedPlayer - standardno bodovanje
 BalancedPlayer::BalancedPlayer(const std::string& playerName)
     : Player(playerName) {
 }
@@ -78,5 +75,5 @@ void BalancedPlayer::addPoints(int points) {
 
 void BalancedPlayer::subtractPoints(int points) {
     score -= points;
-    if (score < 0) score = 0;
+    if (score < 0.0) score = 0.0;
 }

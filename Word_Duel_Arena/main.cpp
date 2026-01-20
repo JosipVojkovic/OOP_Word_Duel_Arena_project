@@ -35,13 +35,13 @@ void displayWelcome() {
 
 void displayRules() {
     std::cout << "\n=== PRAVILA IGRE ===\n\n";
-    std::cout << "- Igra se sastoji od " << 3 << " runde\n";
+    std::cout << "- Igra se sastoji od odredenog broja rundi\n";
     std::cout << "- U svakoj rundi igraci naizmjenicno pogadaju rijec\n";
     std::cout << "- Mozes pogadati pojedina slova ili cijelu rijec\n";
-    std::cout << "- Tocno pogodeno slovo: +1 bod (ostanes na potezu)\n";
+    std::cout << "- Tocno pogodeno slovo: +1 bod\n";
     std::cout << "- Tocno pogodena rijec: +5 bodova\n";
-    std::cout << "- Pogresno slovo: -1 bod (red prelazi dalje)\n";
-    std::cout << "- Pogresna rijec: -2 boda (red prelazi dalje)\n";
+    std::cout << "- Pogresno slovo: -1 bod\n";
+    std::cout << "- Pogresna rijec: -2 boda\n";
     std::cout << "- Pobjeduje igrac s najvise bodova na kraju!\n\n";
 
     std::cout << "=== TIPOVI IGRAcA ===\n\n";
@@ -109,7 +109,6 @@ int main() {
             std::cin.get();
         }
 
-        // Kreiranje igre
         std::cout << "\nKoliko rundi zelis igrati? (preporuceno 3-5): ";
         int rounds;
         std::cin >> rounds;
@@ -122,7 +121,6 @@ int main() {
 
         Game game(rounds);
 
-        // Kreiranje igraca
         std::cout << "\n" << std::string(60, '=') << "\n";
         std::cout << "KREIRANJE IGRACA (potrebna su 3 igraca)\n";
         std::cout << std::string(60, '=') << "\n";
@@ -132,7 +130,6 @@ int main() {
             game.addPlayer(player);
         }
 
-        // Inicijalizacija i pocetak igre
         game.initialize();
 
         std::cout << "\n" << std::string(60, '=') << "\n";
@@ -141,10 +138,8 @@ int main() {
         std::cout << "\nPritisni Enter za pocetak...";
         std::cin.get();
 
-        // Pokretanje igre
         game.start();
 
-        // Spremanje rezultata
         std::cout << "\nzelis li spremiti rezultate? (d/n): ";
         char saveChoice;
         std::cin >> saveChoice;
@@ -153,7 +148,6 @@ int main() {
             game.saveResults("rezultati.txt");
         }
 
-        // Opcija za novu igru
         std::cout << "\nzelis li igrati ponovno? (d/n): ";
         char playAgain;
         std::cin >> playAgain;
