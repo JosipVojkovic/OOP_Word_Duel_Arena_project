@@ -1,8 +1,8 @@
 #include "Game.h"
 #include "Player.h"
 #include <iostream>
-#include <memory>
 #include <limits>
+#include <string>
 
 void displayWelcome() {
     std::cout << "\n";
@@ -56,7 +56,7 @@ void displayRules() {
     std::cout << "- Shield        - stiti od gubitka bodova\n\n";
 }
 
-std::shared_ptr<Player> createPlayer(const std::string& playerNumber) {
+Player* createPlayer(const std::string& playerNumber) {
     std::cout << "\n=== Konfiguracija igraca " << playerNumber << " ===\n";
     std::cout << "Unesi ime: ";
     std::string name;
@@ -72,20 +72,20 @@ std::shared_ptr<Player> createPlayer(const std::string& playerNumber) {
     std::cin >> choice;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::shared_ptr<Player> player;
+    Player* player = nullptr;
     switch (choice) {
     case 1:
-        player = std::make_shared<AggressivePlayer>(name);
+        player = new AggressivePlayer(name);
         break;
     case 2:
-        player = std::make_shared<DefensivePlayer>(name);
+        player = new DefensivePlayer(name);
         break;
     case 3:
-        player = std::make_shared<BalancedPlayer>(name);
+        player = new BalancedPlayer(name);
         break;
     default:
         std::cout << "Neispravan odabir! Koristi se Balanced tip.\n";
-        player = std::make_shared<BalancedPlayer>(name);
+        player = new BalancedPlayer(name);
     }
 
     std::cout << "Igrac kreiran: " << player->getName()
@@ -126,7 +126,7 @@ int main() {
         std::cout << std::string(60, '=') << "\n";
 
         for (int i = 1; i <= 3; ++i) {
-            auto player = createPlayer(std::to_string(i));
+            Player* player = createPlayer(std::to_string(i));
             game.addPlayer(player);
         }
 

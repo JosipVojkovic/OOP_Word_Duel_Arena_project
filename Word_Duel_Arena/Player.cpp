@@ -2,18 +2,26 @@
 #include "PowerUp.h"
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 Player::Player(const std::string& playerName)
     : name(playerName), score(0.0), powerUpUsedThisRound(false) {
 }
 
-void Player::addPowerUp(std::shared_ptr<PowerUp> powerUp) {
+Player::~Player() {
+    for (auto p : powerUps) {
+        delete p;
+    }
+    powerUps.clear();
+}
+
+void Player::addPowerUp(PowerUp* powerUp) {
     powerUps.push_back(powerUp);
 }
 
-std::shared_ptr<PowerUp> Player::usePowerUp(int index) {
+PowerUp* Player::usePowerUp(int index) {
     if (index >= 0 && index < static_cast<int>(powerUps.size())) {
-        auto powerUp = powerUps[index];
+        PowerUp* powerUp = powerUps[index];
         powerUps.erase(powerUps.begin() + index);
         powerUpUsedThisRound = true;
         return powerUp;

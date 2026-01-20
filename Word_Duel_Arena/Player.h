@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include <string>
-#include <memory>
 #include <vector>
 
 class PowerUp;
@@ -11,12 +10,12 @@ class Player {
 protected:
     std::string name;
     double score;
-    std::vector<std::shared_ptr<PowerUp>> powerUps;
+    std::vector<PowerUp*> powerUps;
     bool powerUpUsedThisRound;
 
 public:
     Player(const std::string& playerName);
-    virtual ~Player() = default;
+    virtual ~Player();
 
     virtual void addPoints(int points) = 0;
     virtual void subtractPoints(int points) = 0;
@@ -27,9 +26,9 @@ public:
 
     void resetPowerUpFlag() { powerUpUsedThisRound = false; }
 
-    void addPowerUp(std::shared_ptr<PowerUp> powerUp);
+    void addPowerUp(PowerUp* powerUp);
     bool hasPowerUps() const { return !powerUps.empty(); }
-    std::shared_ptr<PowerUp> usePowerUp(int index);
+    PowerUp* usePowerUp(int index);
     void displayPowerUps() const;
     int getPowerUpCount() const { return static_cast<int>(powerUps.size()); }
 

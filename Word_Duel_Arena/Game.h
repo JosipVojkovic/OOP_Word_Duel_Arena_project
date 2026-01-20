@@ -4,36 +4,35 @@
 #include "Player.h"
 #include "Word.h"
 #include <vector>
-#include <memory>
 #include <string>
 
 class Game {
 private:
-    std::vector<std::shared_ptr<Player>> players;
+    std::vector<Player*> players;
     std::vector<std::string> wordList;
     int currentPlayerIndex;
     int totalRounds;
     int currentRound;
-    std::shared_ptr<Word> currentWord;
+    Word* currentWord;
 
     int scoreMultiplier;
     bool shieldActive;
     bool extraTurnGranted;
 
     void initializeWordList();
-    std::shared_ptr<Word> selectRandomWord();
+    Word* selectRandomWord();
     void distributePowerUps();
     void nextPlayer();
-    bool handlePlayerTurn(std::shared_ptr<Player> player);
+    bool handlePlayerTurn(Player* player);
     void displayGameStatus() const;
     void displayRoundStart() const;
     void displayRoundEnd() const;
 
 public:
     Game(int rounds = 3);
-    ~Game() = default;
+    ~Game();
 
-    void addPlayer(std::shared_ptr<Player> player);
+    void addPlayer(Player* player); // Game takes ownership
     void initialize();
 
     void start();
